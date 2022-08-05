@@ -1,86 +1,152 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import type { NextPage } from "next";
+import Head from "next/head";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Divider, Form, message } from "antd";
+
+import { Filter, TableList } from "components";
+import { dataWithKey } from "utils";
+import { RANDOM_PICK_API } from "constants/api";
+import { DataType, Pagination, Params } from "types/table";
 
 const Home: NextPage = () => {
+  const [form] = Form.useForm();
+
+  const [dataSource, setDataSource] = useState<DataType[]>([]);
+  const [dataFilter, setDataFilter] = useState<DataType[]>([]);
+  const [pagination, setPagination] = useState<Pagination>({
+    current: 1,
+    pageSize: 10,
+    total: 100,
+  });
+  const [params, setParams] = useState<Params>({
+    page: 1,
+    results: 10,
+    gender: "all",
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetchDataSource();
+  }, []);
+
+  const fetchDataSource = async (
+    paramsProps: Params = params,
+    isReset: boolean = false
+  ) => {
+    setIsLoading(true);
+
+    const newParams = getParams(paramsProps);
+    const url = new URL(RANDOM_PICK_API);
+    url.search = new URLSearchParams(newParams).toString();
+
+    await fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        isReset && form.resetFields();
+        handleSuccess(data, newParams);
+      })
+      .catch((error) => handleError(error))
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    const data = dataSource.map((val) => {
+      delete val.key;
+
+      return val;
+    });
+
+    const newDataFilter = data.filter((obj) =>
+      Object.values(obj).some((val) => val.includes(value))
+    );
+
+    setDataFilter(dataWithKey(newDataFilter));
+    !value && setDataSource(dataWithKey(dataSource));
+  };
+
+  const handleSuccess = ({ info, results }: any, newParams: Params) => {
+    const { page, results: pageSize } = info;
+    const mappingData = results.map(
+      ({ login, name, email, gender, registered }: any) => {
+        return {
+          username: login.username,
+          name: `${name.first} ${name.last}`,
+          email,
+          gender,
+          registeredDate: registered.date,
+        };
+      }
+    );
+
+    setPagination({ ...pagination, current: page, pageSize });
+    setParams(newParams);
+    setDataFilter([]);
+    setDataSource(dataWithKey(mappingData));
+  };
+
+  const handleError = (error: any, duration: number = 3) => {
+    let text = "";
+
+    if (typeof error === "string") {
+      text = error;
+    } else {
+      const { data } = error || {};
+      if (data?.message) {
+        text = data?.message;
+      } else if (data?.error) {
+        text = data?.error;
+      } else if (!data) {
+        text = "Network Error";
+      }
+    }
+
+    message.error({ content: text, duration });
+  };
+
+  const getParams = (paramsProps: Params) => {
+    const { page, results } = paramsProps;
+
+    const newParams = {
+      ...paramsProps,
+      page: page.toString(),
+      results: results.toString(),
+    };
+
+    return newParams;
+  };
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Example With Search and Filter</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
+      <main className="py-5 px-8">
+        <h1 className="font-bold text-2xl mb-5">
+          Example With Search and Filter
         </h1>
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
-
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and its API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <Filter
+          form={form}
+          onSearch={onSearch}
+          fetchDataSource={fetchDataSource}
+          params={params}
+        />
+        <Divider />
+        <TableList
+          dataSource={form.getFieldValue("search") ? dataFilter : dataSource}
+          params={params}
+          isLoading={isLoading}
+          pagination={pagination}
+          fetchDataSource={fetchDataSource}
+        />
       </main>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

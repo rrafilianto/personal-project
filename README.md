@@ -7,10 +7,9 @@ This project was created using:
 - [Tailwind CSS](https://tailwindcss.com/) for the utility CSS framework.
 - [Ant Design](https://ant.design/) for the design system.
 
-# Deploy
+## Deploy
 
-Deploy using [Vercel](https://vercel.com/)
-And can see a preview at [www.]()
+Deploy using [Vercel](https://vercel.com/) and can see a preview at [personal-project-alpha.vercel.app](https://personal-project-alpha.vercel.app/)
 
 ## How to use
 
@@ -18,6 +17,12 @@ Install `package.json`
 
 ```bash
 yarn install
+```
+
+Create `.env.local` file in root folder
+
+```bash
+NEXT_PUBLIC_BASE_API_URL=https://randomuser.me/api
 ```
 
 Start project in development mode

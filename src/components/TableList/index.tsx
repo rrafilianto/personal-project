@@ -1,7 +1,7 @@
 import { Table } from "antd";
 
-import useDatesFormat from "hooks/useDatesFormat";
-import { TableProps } from "types/table";
+import useDatesFormat from "@hooks/useDatesFormat";
+import { TableProps } from "@types";
 
 const TableList = ({
   dataSource,

@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { Col, Form, Row, Input, Select, Button } from "antd";
 
-import { debounce } from "utils";
-import { FilterProps } from "types/table";
+import { debounce } from "@utils";
+import { FilterProps } from "@types";
 
 const { Search } = Input;
 const { Option } = Select;

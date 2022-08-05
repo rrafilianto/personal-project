@@ -1,27 +1,39 @@
-# Next.js + Tailwind CSS Example
+# Personal Project
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+This project was created using:
 
-## Deploy your own
+- [Next JS](https://nextjs.org/) for the React Framework.
+- [Typescript](https://www.typescriptlang.org/) for the programming language.
+- [Tailwind CSS](https://tailwindcss.com/) for the utility CSS framework.
+- [Ant Design](https://ant.design/) for the design system.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+# Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+Deploy using [Vercel](https://vercel.com/)
+And can see a preview at [www.]()
 
 ## How to use
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+Install `package.json`
 
 ```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
+yarn install
 ```
+
+Start project in development mode
 
 ```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
+yarn dev
 ```
+
+Build the project for production usage
 
 ```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
+yarn build
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+Start project in production server
+
+```bash
+yarn start
+```

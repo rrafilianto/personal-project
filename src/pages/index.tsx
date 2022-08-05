@@ -3,10 +3,10 @@ import Head from "next/head";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Divider, Form, message } from "antd";
 
-import { Filter, TableList } from "components";
-import { dataWithKey } from "utils";
-import { RANDOM_PICK_API } from "constants/api";
-import { DataType, Pagination, Params } from "types/table";
+import { Filter, TableList } from "@components";
+import { dataWithKey } from "@utils";
+import { RANDOM_PICK_API } from "@constants/api";
+import { DataType, Pagination, Params } from "@types";
 
 const Home: NextPage = () => {
   const [form] = Form.useForm();
